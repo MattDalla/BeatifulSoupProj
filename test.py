@@ -3,7 +3,7 @@ import requests
 
 logging.basicConfig(level=logging.DEBUG)
 from bs4 import BeautifulSoup
-import re
+
 
 
 class UrlGetter:
