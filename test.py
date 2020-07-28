@@ -1,8 +1,10 @@
 import logging
 import requests
+
 logging.basicConfig(level=logging.DEBUG)
 from bs4 import BeautifulSoup
 import re
+
 
 class UrlGetter:
 
@@ -15,13 +17,13 @@ class UrlGetter:
             print(r.status_code)
             return r.content
         except:
+            #notcomplete
             logging.debug("Request Denied")
             return "None"
 
-    def makeHtml(self, page):
-        soup = BeautifulSoup(page,"lxml", from_encoding="unicode")
+    def getUrl(self, page):
+        soup = BeautifulSoup(page, "lxml", from_encoding="unicode")
         concorsi = soup.select('a[href*=concorsi]')
         extractedUrl = concorsi[0].get('href')
         finalUrl = self.url + extractedUrl
-        print(finalUrl)
-
+        return finalUrl
