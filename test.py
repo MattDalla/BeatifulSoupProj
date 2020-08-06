@@ -10,6 +10,13 @@ class UrlGetter:
 
     def __init__(self, strUrl):
         self.url = strUrl
+        self.accessState = True
+
+    def setAccessState(self, bool):  #must be boolean
+        self.accessState = bool
+
+    def getAccessState(self):   #return boolean
+        return self.accessState
 
     def requester(self):
         try:

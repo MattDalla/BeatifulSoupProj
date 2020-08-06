@@ -12,6 +12,14 @@ def main():
         logging.debug("Something went wrong")
         return
     concorsi_url = req.getUrl(page)
+    actualUrl = ""
+    if req.getAccessState():
+        actualUrl = concorsi_url
+        req.setAccessState(True)
+        '''SEND NOTIFICATION TO USER'''
+    else:
+        verify(actualUrl, concorsi_url)
+
     t = time.localtime()
     current_time = time.strftime("%H:%M:%S", t)
     print(current_time)
