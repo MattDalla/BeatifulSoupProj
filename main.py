@@ -1,33 +1,54 @@
-import sys
-
-from test import *
+from urlgetter import *
 import schedule
 import time
+import re
+
+TELEGRAM_TOKEN = 'PUT HERE YOUR TOKENID'
+TELEGRAM_CHAT_ID = 'PUT HERE YOUR CHATID'
+
+firstAccess = True
+actual_number = 0
+
+def urlUtil(url):
+    pivot = url.rfind("=")
+    num = url[pivot+1:len(url)]
+    return int(num)
+
 
 def main():
-    url = 'https://www.gazzettaufficiale.it'
-    req = UrlGetter(url)
-    page = req.requester()
-    if page is "None":
-        logging.debug("Something went wrong")
-        return
-    concorsi_url = req.getUrl(page)
-    actualUrl = ""
-    if req.getAccessState():
-        actualUrl = concorsi_url
-        req.setAccessState(True)
-        '''SEND NOTIFICATION TO USER'''
-    else:
-        verify(actualUrl, concorsi_url)
+    urlGetter = UrlGetter('https://www.gazzettaufficiale.it')
+    last_url = urlGetter.getUrl()
+    last_number = urlUtil(last_url)
 
-    t = time.localtime()
-    current_time = time.strftime("%H:%M:%S", t)
-    print(current_time)
-    print(concorsi_url)
+    global firstAccess
+    global actual_number
+
+    if firstAccess:
+        '''send notification to user'''
+        actual_number = last_number
+        firstAccess = False
+        t = time.localtime()
+        current_time = time.strftime("%H:%M:%S", t)
+        print(current_time)
+        print(last_url)
+        return
+    else:
+        if last_number is actual_number:
+            print(last_url)
+            return
+        else:
+            ''' send notification to user'''
+            actual_number = last_number
+            t = time.localtime()
+            current_time = time.strftime("%H:%M:%S", t)
+            print(current_time)
+            print(last_url)
+            return
+
 
 
 def delayed_task():
-    schedule.every(60).seconds.do(main)
+    schedule.every(10).seconds.do(main)
     while True:
         schedule.run_pending()
         time.sleep(1)
@@ -35,5 +56,5 @@ def delayed_task():
 
 
 if __name__ == "__main__":
-    main()   #I want it to run asap for the first time
+    main() #I want to run it asap at launch
     delayed_task()
