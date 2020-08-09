@@ -1,7 +1,6 @@
 from urlgetter import *
 import schedule
 import time
-import re
 
 TELEGRAM_TOKEN = 'PUT HERE YOUR TOKENID'
 TELEGRAM_CHAT_ID = 'PUT HERE YOUR CHATID'
